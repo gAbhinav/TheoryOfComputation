@@ -1,0 +1,162 @@
+//
+
+//  TOC.c
+
+//  
+
+//
+
+//  Created by
+
+//  Aakanksha Duggal 1410110101
+
+//  Abhinav Gupta 1410110010
+
+//  Carnic 1410110101
+
+
+#include "TOC.h"
+
+#include<stdio.h>
+
+#include<string.h>
+
+#define Char_length 128
+
+
+void search(char *str, char *pattern);
+
+void str_match2(char *pat, int str_match1[][Char_length], int m); //Finite Automata
+
+
+
+int main()
+
+{
+
+    
+
+    char *str = "SEARCH FOR PATTERN";
+
+    char *pattern = "PATT";
+
+    
+
+    search(str, pattern);
+
+    
+
+    return 0;
+
+}
+
+
+int next(char *pattern, int m, int state, int x)
+
+{
+
+    
+
+    if (state < m && x == pattern[state])
+
+    return state+1;
+
+    
+
+    int n, j;
+
+    for (n = state; n > 0; n--)
+
+    {
+
+        if(pattern[n-1] == x)
+
+        {
+
+            for(j = 0; j < n-1; j++)
+
+          		{
+
+                    if (pattern[j] != pattern[state-n+1+j])
+
+                    break;
+
+                }
+
+            
+
+            if (j == n-1)
+
+            return n;
+
+        }
+
+    }
+
+    return 0;
+
+}
+
+
+
+
+void search(char *str, char *pattern)
+
+{
+
+    
+
+    int k, state=0;
+
+    int t = strlen(str);
+
+    int p = strlen(pattern);
+
+    int str_match1[p+1][Char_length];
+
+    
+
+    str_match2(pattern, str_match1, p);
+
+    
+
+    for (k = 0; k < t; k++)
+
+    {
+
+        state = str_match1[state][str[k]];
+
+        if (state == p)
+
+        {
+
+            printf ("\n The pattern is at index : %d\n", k-p+1);
+
+            
+
+            
+
+        }
+
+    }
+
+    
+
+}
+
+
+void str_match2(char *pat, int str_match1[][Char_length], int p)
+
+{
+
+    
+
+    int state, l;
+
+    for (state = 0; state <= p; ++state)
+
+    for (l = 0; l < Char_length; ++l)
+
+    str_match1[state][l] = next(pat, p, state, l);
+
+}
